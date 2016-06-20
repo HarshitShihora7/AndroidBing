@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+   <head>
+      <title>Pushpin attach drag end event</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+      <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+      <!--<script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?branch=release&callback=getMap' async defer></script>-->
+      <script type="text/javascript">
+      var map = null;
+            
+      function getMap()
+      {
+        map = new Microsoft.Maps.Map(document.getElementById('myMap'), {credentials: 'AgHLRIYQYue7FIpX4_lqZp3pC3874PGXzmbS_eg18GV_nEm4OWE1fm9m5fUtuvR2',mapTypeId: Microsoft.Maps.MapTypeId.road,
+         zoom: 12});
+        attachPushpinDragEndEvent();
+      }
+      
+      function attachPushpinDragEndEvent()
+      {
+        var pushpinOptions1 = {text:'S',draggable:true}; 
+        var pushpinOptions2 = {text:'E',draggable:true};
+        //var pushpin1= new Microsoft.Maps.Pushpin(map.getCenter(), pushpinOptions1);
+        //var pushpin2= new Microsoft.Maps.Pushpin(map.getCenter(), pushpinOptions2);
+        var startPin=new Microsoft.Maps.Location(17.443510, 78.647376);
+        var endPin=new Microsoft.Maps.Location(17.447072, 78.635682);
+        var pushpin1= new Microsoft.Maps.Pushpin(startPin, pushpinOptions1);
+        var pushpin2= new Microsoft.Maps.Pushpin(endPin, pushpinOptions2); 
+        var pushpindragStart= Microsoft.Maps.Events.addHandler(pushpin1, 'dragend', endDragDetailsStart);
+        var pushpindragEnd= Microsoft.Maps.Events.addHandler(pushpin2, 'dragend', endDragDetailsEnd);  
+        map.entities.push(pushpin1);
+        map.entities.push(pushpin2);
+        alert("Initial Start: "+startPin);
+        Android.showStartLatLong(String(startPin+""));
+        Android.showEndLatLong(String(endPin+""));
+        //alert('stop dragging newly added pushpin to raise event');
+      }
+      
+
+
+      endDragDetailsStart = function (e) 
+      {
+        //alert("Event Info - start drag \n" + "Start Latitude/Longitude: " + e.entity.getLocation() ); 
+        Android.showStartLatLong(String(e.entity.getLocation()+""));
+      }
+
+      endDragDetailsEnd = function (e) 
+      {
+        //alert("Event Info - start drag \n" + "End Latitude/Longitude: " + e.entity.getLocation() ); 
+        Android.showEndLatLong(String(e.entity.getLocation()+""));
+      }
+      
+      </script>
+   </head>
+   <body onload="getMap();">
+      <div id='myMap' style="position:relative; width: 100vw; height: 100vh;"></div>
+   </body>
+</html>
